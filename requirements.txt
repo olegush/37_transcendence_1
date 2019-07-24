@@ -1,0 +1,4 @@
+python-dotenv==0.10.1
+django==2.2.3
+sentry-sdk==0.10.2
+django-configurations==2.1
