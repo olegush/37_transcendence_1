@@ -19,7 +19,7 @@ For errors logging register account on [sentry.io](https://sentry.io/), connect 
 Put vulnerable parameters to **.env** file.
 
 ```bash
-DEBUG=True
+DEBUG=False
 SECRET_KEY=your_django_secret_key
 SENTRY_DSN=your_sentry_dsn_key
 ```

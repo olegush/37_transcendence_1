@@ -1,15 +1,16 @@
 import os
 
-from dotenv import load_dotenv
+from environs import Env
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 from configurations import Configuration
 
 
-load_dotenv()
+env = Env()
+env.read_env()
 
 sentry_sdk.init(
-    dsn=os.environ.get('SENTRY_DSN'),
+    dsn=env('SENTRY_DSN'),
     integrations=[DjangoIntegration()]
 )
 
@@ -24,14 +25,14 @@ class Dev(Configuration):
     # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
     # SECURITY WARNING: keep the secret key used in production secret!
-    SECRET_KEY = os.environ.get('SECRET_KEY')
+    SECRET_KEY = env('SECRET_KEY')
 
 
     # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG =  os.environ.get('DEBUG')
+    DEBUG =  env.bool('DEBUG')
 
 
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ['127.0.0.1']
 
 
     # Application definition
