@@ -32,7 +32,7 @@ class Dev(Configuration):
     DEBUG =  env.bool('DEBUG')
 
 
-    ALLOWED_HOSTS = ['127.0.0.1']
+    ALLOWED_HOSTS = ['167.71.13.7']
 
 
     # Application definition
@@ -82,10 +82,18 @@ class Dev(Configuration):
     # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
     DATABASES = {
+        #'default': {
+        #    'ENGINE': 'django.db.backends.sqlite3',
+        #    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #}
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': env('PG_DB'),
+            'USER': env('PG_USR'),
+            'PASSWORD': env('PG_PWD'),
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
     }
 
 
