@@ -13,8 +13,13 @@ env.read_env()
 PG_USR = env('PG_USR')
 PG_PWD = env('PG_PWD')
 PG_DB = env('PG_DB')
-DIR = env('DIR')
-GIT_REPO = env('GIT_REPO')
+SITE = env('SITE')
+DIR_SOURCES = env('DIR_SOURCES')
+DIR_PROJECT = env('DIR_PROJECT')
+DIR_PACKAGE = env('DIR_PACKAGE')
+GITHUB_REPO = env('GITHUB_REPO')
+GITHUB_NAME = env('GITHUB_NAME')
+GITHUB_EMAIL = env('GITHUB_EMAIL')
 ENV_DIR = env('ENV_DIR')
 
 
@@ -29,9 +34,7 @@ def db_exists(c, db):
 
 
 @task()
-def bootstrap(c):
-    #c.run('[ -d "transcendence" ] &&  echo "does not exists" fi')
-
+def deploy(c):
     c.run('apt-get update')
     c.run('apt install python3-pip python3-dev python3-psycopg2 libpq-dev postgresql-10 postgresql-contrib nginx curl')
 
@@ -46,67 +49,31 @@ def bootstrap(c):
     c.run(f'sudo -i -u postgres psql -t -A -c "GRANT ALL PRIVILEGES ON DATABASE {PG_DB} to {PG_USR};"')
     c.run('pip3 install --upgrade pip')
     c.run('pip3 install virtualenv')
-    c.run(f'mkdir -p {DIR}')
 
+    c.run(f'mkdir -p {DIR_SOURCES}')
+    c.run(f'[ -d {DIR_SOURCES}/{DIR_PROJECT} ] || git clone {GITHUB_REPO} {DIR_SOURCES}')
+    c.put('.env', DIR_SOURCES)
 
-    c.run(f'[ -d {DIR}/{DIR} ] || git clone {GIT_REPO} {DIR}')
-
-    c.put('.env', DIR)
-
-    with c.cd(DIR):
+    with c.cd(DIR_SOURCES):
         c.run(f'[ -d {ENV_DIR} ] || virtualenv {ENV_DIR}')
         c.run(f'source {ENV_DIR}/bin/activate && python3 -m pip install -r requirements.txt')
+        c.run(f'git config --global user.email "{GITHUB_EMAIL}"')
+        c.run(f'git config --global user.name "{GITHUB_NAME}"')
         c.run('git pull')
-        c.run(f'python3 {DIR}/manage.py makemigrations')
-        c.run(f'python3 {DIR}/manage.py migrate')
-        c.run(f'python3 {DIR}/manage.py migrate')
-        c.run(f'python3 {DIR}/manage.py collectstatic')
-
-
-
-
-
-
-
-
-
-
-
-
-    #c.run('mv /etc/postgresql/10/main/pg_hba.conf /etc/postgresql/10/main/pg_hba.confbak2')
-    #c.run('mv /etc/postgresql/10/main/pg_hba.confbak /etc/postgresql/10/main/pg_hba.conf')
-    #c.put('pg_hba.conf', '/etc/postgresql/10/main/')
-    #c.run('service postgresql restart')
-
-
-    #c.run('passwd postgres')
-
-
-
-
-    #c.run('whoami')
-    #c.run('cd /')
-    #
-
-    #else:
-    #    print('y')
-    #if not user_exists(c, PG_USR):
-    #    c.run(f'sudo -i -u postgres psql -t -A -c "CREATE USER {PG_USR} WITH PASSWORD \'pwD31456\';"')
-
-
-
-
-
-
-
-    #c.run('psql -U postgres template1')
-
-    #c.run('psql -U postgres -c "ALTER USER postgres WITH password \'pwd1\';"')
-
-    #c.run('psql -U postgres -W  -h localhost')
-    #c.run('psql "CREATE ROLE {0} WITH PASSWORD \'{1}\' NOSUPERUSER CREATEDB NOCREATEROLE LOGIN;"'.format('user', 'pwd'))
-    #c.run('psql -U postgres -c "CREATE DATABASE {0} WITH OWNER={1} TEMPLATE=template0 ENCODING=\'utf-8\';"'.format('db', 'user'))
-
-
-    #c.run('\l')
-    #c.run('exit')
+        c.run(f'python3 {DIR_PROJECT}/manage.py makemigrations')
+        c.run(f'python3 {DIR_PROJECT}/manage.py migrate')
+        c.run(f'python3 {DIR_PROJECT}/manage.py migrate')
+        c.run(f'python3 {DIR_PROJECT}/manage.py collectstatic')
+        c.run('envsubst < conf_templates/gunicorn.socket.template > /etc/systemd/system/gunicorn.socket')
+        c.run(f'export DIR_SOURCES={DIR_SOURCES} && export DIR_PROJECT={DIR_PROJECT} && export DIR_PACKAGE={DIR_PACKAGE} && export ENV_DIR={ENV_DIR} && envsubst < conf_templates/gunicorn.service.template > /etc/systemd/system/gunicorn.service')
+        c.run('systemctl start gunicorn.socket')
+        c.run('systemctl enable gunicorn.socket')
+        c.run('systemctl status gunicorn.socket')
+        c.run('systemctl status gunicorn')
+        c.run('systemctl daemon-reload')
+        c.run('systemctl restart gunicorn')
+        c.run(f'export DIR_SOURCES={DIR_SOURCES} && export DIR_PROJECT={DIR_PROJECT} && export SITE={SITE} && envsubst < conf_templates/nginx.conf.template > /etc/nginx/sites-available/{DIR_PROJECT}.conf')
+        c.run(f'ln -sf /etc/nginx/sites-available/{DIR_PROJECT}.conf /etc/nginx/sites-enabled')
+        c.run('ufw delete allow 8000')
+        c.run('ufw allow "Nginx Full"')
+        c.run('systemctl restart nginx')
