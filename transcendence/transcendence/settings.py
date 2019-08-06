@@ -32,7 +32,7 @@ class Dev(Configuration):
     DEBUG =  env.bool('DEBUG')
 
 
-    ALLOWED_HOSTS = ['167.71.13.7']
+    ALLOWED_HOSTS = [env('SITE')]
 
 
     # Application definition
@@ -57,7 +57,7 @@ class Dev(Configuration):
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
     ]
 
-    ROOT_URLCONF = 'transcendence.urls'
+    ROOT_URLCONF = f'{env("DIR_PACKAGE")}.urls'
 
     TEMPLATES = [
         {
@@ -75,7 +75,7 @@ class Dev(Configuration):
         },
     ]
 
-    WSGI_APPLICATION = 'transcendence.wsgi.application'
+    WSGI_APPLICATION = f'{env("DIR_PACKAGE")}.wsgi.application'
 
 
     # Database
