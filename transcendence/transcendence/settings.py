@@ -32,7 +32,7 @@ class Dev(Configuration):
     DEBUG =  env.bool('DEBUG')
 
 
-    ALLOWED_HOSTS = [env('SITE')]
+    ALLOWED_HOSTS = [f'{env("SITE")}']
 
 
     # Application definition
