@@ -1,4 +1,7 @@
+limit_req_zone ${KEY} zone=main:10m rate=1r/s;
+
 server {
+
     listen 80;
     server_name ${SITE};
 
@@ -7,10 +10,12 @@ server {
     }
 
     location /static/ {
+        limit_req zone=main burst=5;
         root /root/${DIR_SOURCES}/${DIR_PROJECT};
     }
 
     location / {
+        limit_req zone=main burst=5;
         include proxy_params;
         proxy_pass http://unix:/run/gunicorn.sock;
     }
