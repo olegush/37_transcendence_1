@@ -1,4 +1,5 @@
 limit_req_zone ${KEY} zone=main:10m rate=1r/s;
+limit_conn_zone ${KEY} zone=addr:10m;
 
 server {
 
@@ -11,6 +12,8 @@ server {
 
     location /static/ {
         limit_req zone=main burst=5;
+        limit_conn addr 1;
+        limit_rate 50k;
         root /root/${DIR_SOURCES}/${DIR_PROJECT};
     }
 
