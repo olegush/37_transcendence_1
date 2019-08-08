@@ -96,3 +96,5 @@ def deploy(c):
         # Run Django management commands.
         c.run(f'python3 {DIR_PROJECT}/manage.py migrate')
         c.run(f'python3 {DIR_PROJECT}/manage.py collectstatic')
+
+        c.run('systemctl restart gunicorn')

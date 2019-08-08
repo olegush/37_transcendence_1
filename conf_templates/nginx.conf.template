@@ -1,4 +1,5 @@
 limit_req_zone ${KEY} zone=main:10m rate=1r/s;
+limit_req_zone ${KEY} zone=static:10m rate=5r/s;
 limit_conn_zone ${KEY} zone=addr:10m;
 
 server {
@@ -10,16 +11,17 @@ server {
         access_log off; log_not_found off;
     }
 
-    location /static/ {
-        limit_req zone=main burst=5;
-        limit_conn addr 1;
-        limit_rate 50k;
-        root /root/${DIR_SOURCES}/${DIR_PROJECT};
-    }
-
     location / {
-        limit_req zone=main burst=5;
+        limit_req zone=main burst=10;
         include proxy_params;
         proxy_pass http://unix:/run/gunicorn.sock;
     }
+
+    location /static/ {
+        limit_req zone=static burst=50;
+        limit_conn addr 1;
+        limit_rate 300k;
+        root /root/${DIR_SOURCES}/${DIR_PROJECT};
+    }
+
 }
