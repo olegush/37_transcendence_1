@@ -40,34 +40,34 @@ def bootstrap(c):
 
     # Create postgres DB.
     if not db_exists(c, PG_DB):
-        c.run(f'sudo -i -u postgres createdb {PG_DB}')
+        c.run(f'sudo -i -u postgres createdb "{PG_DB}"')
         print(f'{PG_DB} created')
 
     # Create postgres user.
     if not user_exists(c, PG_USR):
-        c.run(f'sudo -i -u postgres psql -t -A -c "CREATE USER {PG_USR} WITH PASSWORD \'{PG_PWD}\';"')
+        c.run(f'sudo -i -u postgres psql -t -A -c "CREATE USER ""{PG_USR}"" WITH PASSWORD ""{PG_PWD}"";"')
         print(f'{PG_USR} created')
 
     # Grant privileges to user.
-    c.run(f'sudo -i -u postgres psql -t -A -c "GRANT ALL PRIVILEGES ON DATABASE {PG_DB} to {PG_USR};"')
+    c.run(f'sudo -i -u postgres psql -t -A -c "GRANT ALL PRIVILEGES ON DATABASE ""{PG_DB}"" to ""{PG_USR}"";"')
 
     # Install virtualenv.
     c.run('pip3 install --upgrade pip')
     c.run('pip3 install virtualenv')
 
     # Clone repository from GitHub.
-    c.run(f'mkdir -p {DIR_SOURCES}')
-    c.run(f'[ -d {DIR_SOURCES}/{DIR_PROJECT} ] || git clone {GITHUB_REPO} {DIR_SOURCES}')
+    c.run(f'mkdir -p "{DIR_SOURCES}"')
+    c.run(f'[ -d "{DIR_SOURCES}"/"{DIR_PROJECT}" ] || git clone "{GITHUB_REPO}" "{DIR_SOURCES}"')
 
     c.put('.env', DIR_SOURCES)
 
     with c.cd(DIR_SOURCES):
-        c.run(f'[ -d {ENV_DIR} ] || virtualenv {ENV_DIR}')
-        c.run(f'source {ENV_DIR}/bin/activate && python3 -m pip install -r requirements.txt')
+        c.run(f'[ -d "{ENV_DIR}" ] || virtualenv "{ENV_DIR}"')
+        c.run(f'source "{ENV_DIR}"/bin/activate && python3 -m pip install -r requirements.txt')
 
         # Set Gunicorn configs
         c.run('envsubst < conf_templates/gunicorn.socket.template > /etc/systemd/system/gunicorn.socket')
-        c.run(f'export DIR_SOURCES={DIR_SOURCES} && export DIR_PROJECT={DIR_PROJECT} && export DIR_PACKAGE={DIR_PACKAGE} && export ENV_DIR={ENV_DIR} && envsubst < conf_templates/gunicorn.service.template > /etc/systemd/system/gunicorn.service')
+        c.run(f'export DIR_SOURCES={DIR_SOURCES} && export DIR_PROJECT="{DIR_PROJECT}" && export DIR_PACKAGE="{DIR_PACKAGE}" && export ENV_DIR="{ENV_DIR}" && envsubst < conf_templates/gunicorn.service.template > /etc/systemd/system/gunicorn.service')
         c.run('systemctl start gunicorn.socket')
         c.run('systemctl enable gunicorn.socket')
         c.run('systemctl status gunicorn.socket')
@@ -76,7 +76,7 @@ def bootstrap(c):
         c.run('systemctl restart gunicorn')
 
         # Set Nginx configs
-        c.run(f'export DIR_SOURCES={DIR_SOURCES} && export DIR_PROJECT={DIR_PROJECT} && export SITE={SITE} && export KEY=\'$request_uri\' && envsubst < conf_templates/nginx.conf.template > /etc/nginx/sites-available/{DIR_PROJECT}.conf')
+        c.run(f'export DIR_SOURCES="{DIR_SOURCES}" && export DIR_PROJECT="{DIR_PROJECT}" && export SITE="{SITE}" && export KEY=\'$request_uri\' && envsubst < conf_templates/nginx.conf.template > /etc/nginx/sites-available/"{DIR_PROJECT}".conf')
         c.run(f'ln -sf /etc/nginx/sites-available/{DIR_PROJECT}.conf /etc/nginx/sites-enabled')
         c.run('ufw delete allow 8000')
         c.run('ufw allow "Nginx Full"')
@@ -86,7 +86,7 @@ def bootstrap(c):
 @task()
 def deploy(c):
     with c.cd(DIR_SOURCES):
-        c.run(f'source {ENV_DIR}/bin/activate')
+        c.run(f'source "{ENV_DIR}"/bin/activate')
 
         # Git pull
         c.run(f'git config --global user.email "{GITHUB_EMAIL}"')

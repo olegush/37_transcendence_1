@@ -43,6 +43,7 @@ SITE=your_domain_or_ip
 PG_USR=postgresql_user
 PG_PWD=postgresql_password
 PG_DB=postgresql_database
+DATABASE_URL=postgres://postgresql_user:postgresql_password@localhost:5432/postgresql_database
 DIR_SOURCES=directory_with_your_sources
 DIR_PROJECT=django_project_directory
 DIR_PACKAGE=django_package_directory
@@ -52,14 +53,20 @@ GITHUB_EMAIL=your_email_on_github
 ENV_DIR=directory_with_your_remote_virtual_environment
 ```
 
-3. Run **fabfile.py** with arguments:
+3. For bootstrapping run **fabfile.py** with arguments:
+```bash
+fab --hosts=root@your_domain_or_ip bootstrap
+```
+
+4. For deploying:
 ```bash
 fab --hosts=root@your_domain_or_ip deploy
 ```
 
-4. Check out your site on http://your_domain_or_ip
+5. Check out your site on http://your_domain_or_ip
 
-5. Make some changes in template, for example, push to GitHub, run **fabfile.py** again and check it.
+6. Make some changes in template, for example, push to GitHub, run deploy again and check it.
+
 
 # Project Goals
 

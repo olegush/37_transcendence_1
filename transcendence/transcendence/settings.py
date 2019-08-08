@@ -4,7 +4,6 @@ from environs import Env
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 from configurations import Configuration
-import dj_database_url
 
 env = Env()
 env.read_env()
@@ -80,23 +79,17 @@ class Dev(Configuration):
 
     # Database
     # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-    DATABASES = {}
-    DATABASES['default'] = dj_database_url.config()
 
-    #DATABASES = {
-    #    #'default': {
-    #    #    'ENGINE': 'django.db.backends.sqlite3',
-    #    #    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    #    #}
-    #    'default': {
-    #        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #        'NAME': env('PG_DB'),
-    #        'USER': env('PG_USR'),
-    #        'PASSWORD': env('PG_PWD'),
-    #    'HOST': 'localhost',
-    #    'PORT': '5432',
-    #}
-    #}
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': env('PG_DB'),
+            'USER': env('PG_USR'),
+            'PASSWORD': env('PG_PWD'),
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+    }
 
 
     # Password validation
