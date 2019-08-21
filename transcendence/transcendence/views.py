@@ -1,6 +1,7 @@
 from django.conf import settings
-from django.shortcuts import render, get_list_or_404, get_object_or_404
-from django.http import HttpResponse
+from django.shortcuts import render, redirect
 
 def index(request):
-    return HttpResponse("index")
+    if request.user.is_authenticated:
+        return redirect('wall/')
+    return render(request, 'registration/login.html')

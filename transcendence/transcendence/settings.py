@@ -43,7 +43,7 @@ class Dev(Configuration):
         'django.contrib.sessions',
         'django.contrib.messages',
         'django.contrib.staticfiles',
-        'users'
+        'users',
     ]
 
     MIDDLEWARE = [
@@ -109,6 +109,12 @@ class Dev(Configuration):
             'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
         },
     ]
+    #I&$#GVT#^zfd
+
+    AUTH_USER_MODEL = 'users.CustomUser'
+
+    LOGIN_REDIRECT_URL = '/wall'
+    LOGOUT_REDIRECT_URL = '/'
 
 
     # Internationalization
@@ -130,9 +136,9 @@ class Dev(Configuration):
 
     STATIC_URL = '/static/'
 
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-    #STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+    #STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-    MEDIA_URL = '/media/'
+    MEDIA_URL = os.path.join(BASE_DIR, 'media/')

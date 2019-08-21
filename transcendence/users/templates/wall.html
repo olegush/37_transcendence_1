@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}wall{% endblock %}
+
+
+{% block content %}
+<div class="row">
+
+<aside class="col-md-4 blog-sidebar">
+  <div class="p-4 mb-3 bg-light rounded">
+    <p class="mb-0"><img src="{{ user.image.url }}" style="width:100%;"></p>
+    <h4 class="font-italic">{{ user.name }}</h4>
+    <p>{{ user.description }}</p>
+  </div>
+
+  <div class="p-4">
+    <h4 class="font-italic">Friends</h4>
+    <ol class="list-unstyled mb-0">
+      <li><a href="#">March 2014</a></li>
+      <li><a href="#">February 2014</a></li>
+      <li><a href="#">January 2014</a></li>
+      <li><a href="#">December 2013</a></li>
+      <li><a href="#">November 2013</a></li>
+      <li><a href="#">October 2013</a></li>
+      <li><a href="#">September 2013</a></li>
+      <li><a href="#">August 2013</a></li>
+      <li><a href="#">July 2013</a></li>
+      <li><a href="#">June 2013</a></li>
+      <li><a href="#">May 2013</a></li>
+      <li><a href="#">April 2013</a></li>
+    </ol>
+  </div>
+
+  <div class="p-4">
+    <h4 class="font-italic">Elsewhere</h4>
+    <ol class="list-unstyled">
+      <li><a href="#">GitHub</a></li>
+      <li><a href="#">Twitter</a></li>
+      <li><a href="#">Facebook</a></li>
+    </ol>
+  </div>
+</aside><!-- /.blog-sidebar -->
+
+
+    <div class="col-md-8 blog-main">
+
+      <div class="blog-post">
+        <h2 class="blog-post-title">{% lorem 2 w random %}</h2>
+        <p class="blog-post-meta">December 23, 2013 by <a href="#">me</a></p>
+        <p>{% lorem 1 p random %}</p>
+      </div><!-- /.blog-post -->
+
+      <div class="blog-post">
+        <h2 class="blog-post-title">{% lorem 2 w random %}</h2>
+        <p class="blog-post-meta">December 23, 2013 by <a href="#">me</a></p>
+        <p>{% lorem 1 p random %}</p>
+      </div><!-- /.blog-post -->
+
+      <div class="blog-post">
+        <h2 class="blog-post-title">{% lorem 2 w random %}</h2>
+        <p class="blog-post-meta">December 23, 2013 by <a href="#">me</a></p>
+        <p>{% lorem 1 p random %}</p>
+      </div><!-- /.blog-post -->
+
+      <div class="blog-post">
+        <h2 class="blog-post-title">{% lorem 2 w random %}</h2>
+        <p class="blog-post-meta">December 23, 2013 by <a href="#">me</a></p>
+        <p>{% lorem 1 p random %}</p>
+      </div><!-- /.blog-post -->
+
+      <div class="blog-post">
+        <h2 class="blog-post-title">{% lorem 2 w random %}</h2>
+        <p class="blog-post-meta">December 23, 2013 by <a href="#">me</a></p>
+        <p>{% lorem 1 p random %}</p>
+      </div><!-- /.blog-post -->
+
+      <nav class="blog-pagination">
+        <a class="btn btn-outline-primary" href="#">Older</a>
+        <a class="btn btn-outline-secondary disabled" href="#" tabindex="-1" aria-disabled="true">Newer</a>
+      </nav>
+
+    </div><!-- /.blog-main -->
+
+</div><!-- /.row -->
+{% endblock %}
