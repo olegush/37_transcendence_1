@@ -6,8 +6,8 @@ After=network.target
 [Service]
 User=root
 Group=www-data
-WorkingDirectory=/root/${DIR_SOURCES}/${DIR_PROJECT}
-ExecStart=/root/${DIR_SOURCES}/${ENV_DIR}/bin/gunicorn \
+WorkingDirectory=${DIR_SOURCES}/${DIR_PROJECT}
+ExecStart=${DIR_SOURCES}/${ENV_DIR}/bin/gunicorn \
           --access-logfile - \
           --workers 3 \
           --bind unix:/run/gunicorn.sock \

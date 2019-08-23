@@ -53,10 +53,12 @@ def bootstrap(c):
 
     # Install virtualenv.
     c.run('pip3 install --upgrade pip')
+    c.run('pip3 install Pillow')
     c.run('pip3 install virtualenv')
 
     # Clone repository from GitHub.
     c.run(f'mkdir -p "{DIR_SOURCES}"')
+    c.run(f'chown -R www-data:www-data "{DIR_SOURCES}"')
     c.run(f'[ -d "{DIR_SOURCES}"/"{DIR_PROJECT}" ] || git clone "{GITHUB_REPO}" "{DIR_SOURCES}"')
 
     c.put('.env', DIR_SOURCES)
@@ -97,4 +99,6 @@ def deploy(c):
         c.run(f'python3 {DIR_PROJECT}/manage.py migrate')
         c.run(f'python3 {DIR_PROJECT}/manage.py collectstatic')
 
+        c.run('systemctl daemon-reload')
         c.run('systemctl restart gunicorn')
+        c.run('systemctl restart nginx')
