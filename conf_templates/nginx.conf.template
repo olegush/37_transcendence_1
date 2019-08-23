@@ -24,4 +24,13 @@ server {
         root ${DIR_SOURCES}/${DIR_PROJECT};
     }
 
+    location /media/ {
+     limit_req zone=static burst=50;
+     limit_conn addr 1;
+     limit_rate 300k;
+     root ${DIR_SOURCES}/${DIR_PROJECT};
+    }
+
+
+
 }
