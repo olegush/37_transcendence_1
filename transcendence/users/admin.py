@@ -12,7 +12,8 @@ class CustomUserAdmin(UserAdmin):
     list_display = ('email', 'image', 'is_staff', 'is_active',)
     list_filter = ('email', 'is_staff', 'is_active',)
     fieldsets = (
-        (None, {'fields': ('email', 'name', 'description', 'image', )}),
+        ('Info', {'fields': ('email', 'name', 'description', 'image', )}),
+        ('Friends', {'fields': ('friends', )}),
         ('Permissions', {'fields': ('is_staff', 'is_active')}),
     )
     add_fieldsets = (
@@ -23,6 +24,7 @@ class CustomUserAdmin(UserAdmin):
     )
     search_fields = ('email',)
     ordering = ('email',)
+    #raw_id_fields  = ('friends',)
 
 
 admin.site.register(CustomUser, CustomUserAdmin)

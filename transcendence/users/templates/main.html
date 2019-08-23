@@ -1,21 +1,26 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block container %}
 <div class="row">
 <aside class="col-md-4 blog-sidebar">
   <div class="p-4 mb-3 bg-light rounded">
-    <p class="mb-0"><img src="{{ user.image.url }}" style="width:100%;"></p>
+    {% if user.image.url != '' %}
+      <p class="mb-0"><img src="{{ user.image.url }}" style="width:100%;"></p>
+    {% else %}
+      <p class="mb-0"><img src="{% static "images/default_avatar.png" %}" style="width:100%;"></p>
+    {% endif %}
     <h4 class="font-italic">{{ user.name }}</h4>
     <p>{{ user.description }}</p>
+    <p></p>
   </div>
 
   <div class="p-4">
     <h4 class="font-italic">Friends</h4>
     <ol class="list-unstyled mb-0">
-      <li><a href="#">March 2014</a></li>
-      <li><a href="#">February 2014</a></li>
-      <li><a href="#">January 2014</a></li>
-      <li><a href="#">December 2013</a></li>
+      {% for friend in user.friends %}
+        <li><a href="/id{{ friend.id }}">{{ friend.name }}</a></li>
+      {% endfor %}
     </ol>
   </div>
 

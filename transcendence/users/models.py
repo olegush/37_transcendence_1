@@ -14,6 +14,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
+    friends = models.ManyToManyField('self', symmetrical=False, verbose_name="friends", related_name="my_friends", blank=True)
 
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
@@ -22,7 +23,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     def __str__(self):
-        return '{}{}{}{}'.format(self.id, self.email, self.description, self.image)
+        return '{}{}{}{}{}'.format(self.id, self.email, self.description, self.image, self.friends)
 
     def get_absolute_url(self):
         return '/user/{}/'.format(self.pk)
