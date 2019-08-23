@@ -18,15 +18,10 @@ def show_user(request, **kwargs):
 @login_required
 def show_profile(request):
     if request.method == 'POST':
-        user = get_object_or_404(CustomUser, id = request.user.id)
-        form = ProfileForm(request.POST, instance=user)
+        form = ProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
-
-            #print(user)
             form.save()
-            #user.name =
-            return render(request, 'profile.html', context={'user': request.user, 'form': form})
-    else:
-        data = {'name': request.user.name, 'description': request.user.description}
-        form = ProfileForm(data)
-    return render(request, 'profile.html', context={'user': request.user, 'form': form})
+    user = get_object_or_404(CustomUser, id = request.user.id)
+    print(user.image)
+    form = ProfileForm({'name': user.name, 'description': user.description, 'image': user.image})
+    return render(request, 'profile.html', context={'user': user, 'form': form.as_p})

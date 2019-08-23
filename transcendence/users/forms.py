@@ -1,3 +1,4 @@
+from django.forms import ModelForm, Textarea, TextInput, FileInput
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django import forms
 
@@ -18,10 +19,15 @@ class CustomUserChangeForm(UserChangeForm):
         fields = ('email',)
 
 
-class ProfileForm(forms.ModelForm):
+class ProfileForm(ModelForm):
     class Meta:
        model = CustomUser
-       fields = ['name', 'description']
+       fields = ['name', 'description', 'image']
+       widgets = {
+            'name': TextInput(attrs={'class': 'form-control'}),
+            'description': Textarea(attrs={'rows': 10, 'class': 'form-control'}),
+            'image': FileInput(attrs={'class': 'form-control', 'data-buttonText': "Your label here."}),
+        }
     #name = forms.CharField(label='Your name', max_length=200)
     #image = forms.ImageField(label='image')
     #description = forms.CharField(widget=forms.Textarea)
