@@ -9,6 +9,8 @@ from .forms import ProfileForm
 def display_user(request, **kwargs):
     id = kwargs['user_id']
     user = get_object_or_404(CustomUser, id = id)
+    if request.method == 'POST':
+        request.user.friends.add(user)
     is_friend = request.user.is_authenticated and request.user.friends.filter(pk=id).exists()
     return render(request, 'wall.html', context={'is_friend': is_friend, 'user': user})
 

@@ -21,7 +21,11 @@
       {% endcomment %}
     </ol>
     {% if not is_friend and request.user != user and request.user.is_authenticated %}
+      <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="add_friend" value="{{ user }}">
       <input type="submit" value="Add to Friends" class="btn btn-outline-primary mt-3">
+      </form>
     {% endif %}
   </div>
 </aside><!-- /.blog-sidebar -->

@@ -23,7 +23,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     def __str__(self):
-        return '{}{}{}{}{}'.format(self.id, self.email, self.description, self.image, self.friends)
+        return '{}: {}'.format(self.id, self.email)
 
     def get_absolute_url(self):
         return '/user/{}/'.format(self.pk)
