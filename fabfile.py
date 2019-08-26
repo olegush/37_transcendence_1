@@ -78,7 +78,7 @@ def bootstrap(c):
         c.run('systemctl restart gunicorn')
 
         # Set Nginx configs
-        c.run(f'export DIR_SOURCES="{DIR_SOURCES}" && export DIR_PROJECT="{DIR_PROJECT}" && export SITE="{SITE}" && export KEY=\'$request_uri\' && envsubst < conf_templates/nginx.conf.template > /etc/nginx/sites-available/"{DIR_PROJECT}".conf')
+        c.run(f'export DIR_SOURCES="{DIR_SOURCES}" && export DIR_PROJECT="{DIR_PROJECT}" && export SITE="{SITE}" && export KEY=\'$request_uri\' && envsubst < conf_templates/nginx.conf.template > /etc/nginx/sites-available/{DIR_PROJECT}.conf')
         c.run(f'ln -sf /etc/nginx/sites-available/{DIR_PROJECT}.conf /etc/nginx/sites-enabled')
         c.run('ufw delete allow 8000')
         c.run('ufw allow "Nginx Full"')
