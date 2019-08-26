@@ -1,6 +1,6 @@
 # Transcendence project
 
-Social network prototype based on [Django](https://docs.djangoproject.com/) with [Bootstrap](https://getbootstrap.com/). Deploy process coded on [fabric](http://docs.fabfile.org/) with [GitHub](https://github.com/). For errors logging used [sentry.io](https://sentry.io/).
+Social network [prototype](http://167.71.13.7/) based on [Django](https://docs.djangoproject.com/) with [Bootstrap](https://getbootstrap.com/). Deploy process coded on [fabric](http://docs.fabfile.org/) with [GitHub](https://github.com/). For errors logging used [sentry.io](https://sentry.io/).
 
 
 # How to Install
