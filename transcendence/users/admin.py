@@ -20,7 +20,7 @@ class FriendsQuantity(admin.SimpleListFilter):
         if self.value() == '0':
             return queryset.annotate(friends_count=Count('friends')).filter(friends_count__exact = 0)
         if self.value() == '1-2':
-            return queryset.annotate(friends_count=Count('friends')).filter(friends_count__lte = 2)
+            return queryset.annotate(friends_count=Count('friends')).filter(friends_count__lte = 2, friends_count__gte = 1)
         if self.value() == '>2':
             return queryset.annotate(friends_count=Count('friends')).filter(friends_count__gt = 2)
 
