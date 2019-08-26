@@ -8,29 +8,21 @@
     {% if user.image.url != '' %}
       <p class="mb-0"><img src="{{ user.image.url }}" style="width:100%;"></p>
     {% else %}
-      <p class="mb-0"><img src="{% static "images/default_avatar.png" %}" style="width:100%;"></p>
+      <p ><img src="{% static "images/default_avatar.png" %}" style="width:100%;"></p>
     {% endif %}
-    <h4 class="font-italic">{{ user.name }}</h4>
+    <h4 class="mt-3">{{ user.name }} {% if is_friend %}<sup><span class="badge badge-secondary">friend</span></sup>{% endif %}</h4>
     <p>{{ user.description }}</p>
-    <p></p>
-  </div>
-
-  <div class="p-4">
-    <h4 class="font-italic">Friends</h4>
+    <h5>Friends</h5>
     <ol class="list-unstyled mb-0">
-      {% for friend in user.friends %}
+      {% for friend in user.friends.all %}
         <li><a href="/id{{ friend.id }}">{{ friend.name }}</a></li>
       {% endfor %}
+      {% comment %}
+      {% endcomment %}
     </ol>
-  </div>
-
-  <div class="p-4">
-    <h4 class="font-italic">Elsewhere</h4>
-    <ol class="list-unstyled">
-      <li><a href="#">GitHub</a></li>
-      <li><a href="#">Twitter</a></li>
-      <li><a href="#">Facebook</a></li>
-    </ol>
+    {% if not is_friend and request.user != user and request.user.is_authenticated %}
+      <input type="submit" value="Add to Friends" class="btn btn-outline-primary mt-3">
+    {% endif %}
   </div>
 </aside><!-- /.blog-sidebar -->
 {% block content %}

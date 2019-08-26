@@ -10,9 +10,9 @@ urlpatterns = [
     path('', views.index),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('id<user_id>', users_views.show_user),
-    path('wall/', users_views.show_user),
-    path('profile/', users_views.show_profile),
+    path('id<user_id>', users_views.display_user),
+    path('wall/', users_views.display_wall),
+    path('profile/', users_views.display_profile),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

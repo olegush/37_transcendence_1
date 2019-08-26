@@ -6,18 +6,21 @@ from users.models import CustomUser
 from .forms import ProfileForm
 
 
-def show_user(request, **kwargs):
-    is_authenticated = request.user.is_authenticated
-    if kwargs:
-        user = get_object_or_404(CustomUser, id = kwargs['user_id'])
-    else:
-        user = request.user
-    friends = [{'id':friend.id, 'name': friend.name} for friend in user.friends.all()]
-    return render(request, 'wall.html', context={'user': {'is_authenticated': is_authenticated, 'name': user.name, 'description': user.description, 'image': user.image, 'friends': friends}})
+def display_user(request, **kwargs):
+    id = kwargs['user_id']
+    user = get_object_or_404(CustomUser, id = id)
+    is_friend = request.user.is_authenticated and request.user.friends.filter(pk=id).exists()
+    return render(request, 'wall.html', context={'is_friend': is_friend, 'user': user})
 
 
 @login_required
-def show_profile(request):
+def display_wall(request):
+    user = request.user
+    return render(request, 'wall.html', context={'user': user})
+
+
+@login_required
+def display_profile(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
