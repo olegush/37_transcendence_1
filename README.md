@@ -1,6 +1,6 @@
 # Transcendence project
 
-[TODO. There will be project description]
+Social network prototype based on [Django](https://docs.djangoproject.com/) with [Bootstrap](https://getbootstrap.com/). Deploy process coded on [fabric](http://docs.fabfile.org/) with [GitHub](https://github.com/). For errors logging used [sentry.io](https://sentry.io/).
 
 
 # How to Install
@@ -21,6 +21,10 @@ python3 -m pip install -r requirements.txt
 ```bash
 DEBUG=False
 SECRET_KEY=your_django_secret_key
+STATIC_URL=STATIC_URL
+STATIC_ROOT=STATIC_ROOT
+MEDIA_URL=MEDIA_URL
+MEDIA_ROOT=MEDIA_ROOT
 SENTRY_DSN=your_sentry_dsn_key
 ```
 
