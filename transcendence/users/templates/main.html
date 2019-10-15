@@ -20,13 +20,23 @@
       {% comment %}
       {% endcomment %}
     </ol>
-    {% if not is_friend and request.user != user and request.user.is_authenticated %}
-      <form method="post">
-      {% csrf_token %}
-      <input type="hidden" name="add_friend" value="{{ user }}">
-      <input type="submit" value="Add to Friends" class="btn btn-outline-primary mt-3">
-      </form>
+
+    {% if request.user.is_authenticated and request.user != user %}
+      {% if not is_friend %}
+        <form action="add_to_friends/"  method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <input type="submit" value="Add to Friends" class="btn btn-outline-primary mt-3">
+        </form>
+      {% else %}
+        <form action="remove_from_friends/"  method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <input type="submit" value="Remove from Friends" class="btn btn-outline-primary mt-3">
+        </form>
+      {% endif %}
     {% endif %}
+
   </div>
 </aside><!-- /.blog-sidebar -->
 {% block content %}

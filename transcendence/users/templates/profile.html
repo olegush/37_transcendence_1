@@ -3,9 +3,9 @@
 
 {% block content %}
     <div class="col-md-8 blog-main">
-      <form action="/profile/" method="post" enctype="multipart/form-data">
+      <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form }}
+        {{ form_profile.as_p }}
         <input type="submit" value="Save" class="btn btn-outline-primary mt-3">
       </form>
     </div><!-- /.blog-main -->

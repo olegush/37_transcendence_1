@@ -6,13 +6,16 @@ from django.conf import settings
 from . import views
 from users import views as users_views
 
+
 urlpatterns = [
     path('', views.index),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('id<user_id>', users_views.display_user),
-    path('wall/', users_views.display_wall),
-    path('profile/', users_views.display_profile),
+    path('id<int:pk>/', users_views.DisplayUser.as_view(), name='user'),
+    path('id<int:pk>/add_to_friends/', users_views.UserAddToFriends.as_view()),
+    path('id<int:pk>/remove_from_friends/', users_views.UserRemoveFromFriends.as_view()),
+    path('profile/', users_views.UserUpdate.as_view(), name='profile'),
+    path('wall/', users_views.DisplayWall.as_view(), name='wall'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

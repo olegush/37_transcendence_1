@@ -26,4 +26,4 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return '{}: {}'.format(self.id, self.email)
 
     def get_absolute_url(self):
-        return '/user/{}/'.format(self.pk)
+        return reverse('user', kwargs={'pk': self.pk})
