@@ -8,13 +8,6 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    #path('accounts/', include('django.contrib.auth.urls')),
-    #path('', views.show_user, name='user'),
-    #views.wall
-
-    #path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-    #path('', views.show_user, name='user'),
-    #path('accounts/', include('users.urls')),
 
 ]
 
