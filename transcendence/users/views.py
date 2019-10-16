@@ -10,18 +10,18 @@ from django.db.models import F, Q, Case, When
 from users.models import CustomUser, Post, Status
 from .forms import ProfileForm, PostForm
 
-
-class DisplayWall(ListView, LoginRequiredMixin):
+Status.objects.all()
+class MyPostsList(LoginRequiredMixin, ListView):
     model = Post
     paginate_by = 10
-    template_name = 'wall.html'
+    template_name = 'my_posts.html'
 
     def get_queryset(self):
         user_id = self.request.user.id
         return Post.objects.filter(author=user_id)
 
 
-class DisplaySubscriptions(ListView, LoginRequiredMixin):
+class SubscriptionsList(LoginRequiredMixin, ListView):
     model = Post
     paginate_by = 10
     template_name = 'subscriptions.html'
@@ -33,19 +33,21 @@ class DisplaySubscriptions(ListView, LoginRequiredMixin):
         return posts.annotate(status__read=F('status__read'))
 
 
-class PostListView(ListView):
+class AllPostsList(ListView):
     model = Post
     paginate_by = 10
-    template_name = 'posts.html'
+    template_name = 'all_posts.html'
 
     def get_queryset(self):
         user = self.request.user
         posts = Post.objects.all()
-        status_case = Case(When(status__user=user, then='status__read'))
-        return posts.annotate(status__read=status_case)
+        if user.is_authenticated:
+            status_case = Case(When(status__user=user, then='status__read'))
+            posts = posts.annotate(status__read=status_case)
+        return posts
 
 
-class PostDetailView(DetailView):
+class PostDetail(DetailView):
     model = Post
     template_name = 'post.html'
 
@@ -53,12 +55,14 @@ class PostDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         post_id = context['post'].id
-        #TODO !!! 'AnonymousUser' object is not iterable
-        context['read'] = Status.objects.filter(user=user, post=post_id).first()
+        if user.is_authenticated:
+            context['readby'] = Status.objects.filter(user=user, post=post_id).first()
+        else:
+            context['readby'] = 'AnonymousUser'
         return context
 
 
-class PostListbyAuthorView(ListView):
+class PostListbyAuthor(ListView):
     model = Post
     paginate_by = 10
     template_name = 'post_list_by_author.html'
@@ -76,7 +80,7 @@ class PostListbyAuthorView(ListView):
         return posts.annotate(status__read=F('status__read'))
 
 
-class PostAdd(CreateView, LoginRequiredMixin):
+class PostAdd(LoginRequiredMixin, CreateView):
     model = Post
     form = PostForm
     fields = ['name', 'description']
@@ -89,13 +93,26 @@ class PostAdd(CreateView, LoginRequiredMixin):
 
     def post(self, request, *args, **kwargs):
         id = request.user.id
-        form = self.form(request.POST) #, request.FILES, instance=request.user)
+        form = self.form(request.POST)
         form.instance.author = CustomUser.objects.get(pk=id)
         if form.is_valid():
             new_post = form.save()
             #TODO !!!!!!!!!
             return redirect('post', pk=new_post.id)
         return render(request, self.template_name, {'form': form, 'pk': request.user.pk})
+
+
+class PostMarkAsRead(LoginRequiredMixin, CreateView):
+    model = Status
+    fields = []
+    #form = StatusForm
+
+    def form_valid(self, form):
+        post_id = self.kwargs['pk']
+        user = self.request.user
+        read_post = Post.objects.select_related('author').get(pk=post_id)
+        Status.objects.create(user=user, post=read_post, read=True)
+        return redirect('post', pk=post_id)
 
 
 class UsersList(ListView):
@@ -107,7 +124,7 @@ class UsersList(ListView):
         return CustomUser.objects.exclude(pk=self.request.user.id)
 
 
-class DisplayUser(DetailView):
+class UserDisplay(DetailView):
     model = CustomUser
     template_name = 'user.html'
 
@@ -116,7 +133,7 @@ class DisplayUser(DetailView):
         user_id = self.request.user.id
         id = self.object.pk
         me = self.request.user
-        author = CustomUser.objects.get(pk=self.kwargs['pk'])
+        author = CustomUser.objects.get(pk=id)
         posts = Post.objects.filter(author=author)
         context['posts'] = posts.annotate(status__read=F('status__read'))
         context['user'] = get_object_or_404(CustomUser, id = id)
@@ -124,7 +141,7 @@ class DisplayUser(DetailView):
         return context
 
 
-class UserAddToFriends(UpdateView, LoginRequiredMixin):
+class UserAddToFriends(LoginRequiredMixin, UpdateView):
     model = CustomUser
     fields = []
 
@@ -135,7 +152,7 @@ class UserAddToFriends(UpdateView, LoginRequiredMixin):
         return reverse('user', kwargs={'pk': user.pk})
 
 
-class UserRemoveFromFriends(UpdateView, LoginRequiredMixin):
+class UserRemoveFromFriends(LoginRequiredMixin, UpdateView):
     model = CustomUser
     fields = []
 
@@ -146,7 +163,7 @@ class UserRemoveFromFriends(UpdateView, LoginRequiredMixin):
         return reverse('user', kwargs={'pk': user.pk})
 
 
-class UserUpdate(UpdateView, LoginRequiredMixin):
+class UserUpdate(LoginRequiredMixin, UpdateView):
     model = CustomUser
     form = ProfileForm
     fields = ['name', 'description', 'image']
