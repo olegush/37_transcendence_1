@@ -56,7 +56,7 @@ class Post(models.Model):
         #send_mail(subject, message, settings.EMAIL_HOST_USER, recipient_list )
 
     def __str__(self):
-        return self.name
+        return f'{self.pk}'
 
 
 class Status(models.Model):
@@ -65,4 +65,4 @@ class Status(models.Model):
     read = models.BooleanField(default=True)
 
     def __str__(self):
-        return f'user: {self.user}, post: {self.post}'
+        return f'pk: {self.pk}, user: {self.user}, post: {self.post}, read: {self.read}'
