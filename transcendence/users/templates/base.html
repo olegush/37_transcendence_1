@@ -45,12 +45,12 @@
   <div class="collapse navbar-collapse" id="navbarsExampleDefault">
     <ul class="navbar-nav mr-auto">
         <li class="nav-item active"><a class="nav-link" href="/users/">[ All users</a></li>
-        <li class="nav-item active"><a class="nav-link" href="/posts/">All posts ]</a></li>
+        <li class="nav-item active"><a class="nav-link" href="/all_posts/">All posts ]</a></li>
     </ul>
 
     <ul class="navbar-nav mr-auto">
       {% if request.user.is_authenticated %}
-        <li class="nav-item active"><a class="nav-link" href="/wall/">[ My wall</a></li>
+        <li class="nav-item active"><a class="nav-link" href="/my_posts/">[ My wall</a></li>
         <li class="nav-item active"><a class="nav-link" href="/subscriptions/">My subscriptions ]</a></li>
       {% endif %}
     </ul>
@@ -84,13 +84,11 @@
       {% endif %}
       {% if page_obj.has_next %}
       <li><a href="?page={{ page_obj.next_page_number }}" class="page-link"> NEXT &raquo;</a></li>
-
       {% endif %}
     </ul>
     </nav>
   {% endif %}
 {% endblock %}
-
 
 <footer class="container">
   <p>&copy; TP 2019</p>

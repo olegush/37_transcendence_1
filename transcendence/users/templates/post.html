@@ -1,25 +1,26 @@
 {% extends 'main.html' %}
 {% block title %}post{% endblock %}
 
-{% block content %}
+{% block container %}
   <div class="col-md-8 blog-main">
   <h1>{{ post.name }}</h1>
   <p class="blog-post-meta">Опубликовано: {{ post.post_date }}</p>
-  <p class="blog-post-meta">Автор: <a href="{% url 'posts-by-author' post.author.pk %}">{{ post.author.name }}</a></p>
+  <p class="blog-post-meta">Автор: <a href="{{ post.author.get_absolute_url }}">{{ post.author.name }}</a></p>
   <p style="white-space:pre-wrap;">{{ post.description }}</p>
-
-  {% if read %}
-    <form action="markasread/"  method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <input type="submit" class="btn btn-outline-primary mt-3" value="Прочитано" disabled/>
-    </form>
-  {% else %}
-    <form action="markasread/"  method="post">
-      {% csrf_token %}
+  {% if readby != 'AnonymousUser' %}
+    {% if readby %}
+      <form action="markasread/"  method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn btn-outline-primary mt-3" value="Прочитано" disabled/>
+      </form>
+    {% else %}
+      <form action="markasread/"  method="post">
+        {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" class="btn btn-outline-primary mt-3" value="Пометить прочитанным">
-    </form>
+      </form>
+    {% endif %}
   {% endif %}
   </div>
 {% endblock %}

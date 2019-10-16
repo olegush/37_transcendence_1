@@ -1,9 +1,9 @@
 {% extends 'main.html' %}
 {% block title %}wall{% endblock %}
 
-{% block content %}
+{% block container %}
 <div class="col-md-8 blog-main">
-<h1>My wall</h1>
+<h1>My posts</h1>
 {% if post_list %}
   {% for post in post_list %}
     <div class="blog-post">
