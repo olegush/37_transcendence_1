@@ -113,7 +113,7 @@ class Dev(Configuration):
 
     AUTH_USER_MODEL = 'users.CustomUser'
 
-    LOGIN_REDIRECT_URL = '/wall'
+    LOGIN_REDIRECT_URL = '/my_posts'
     LOGOUT_REDIRECT_URL = '/'
 
 
