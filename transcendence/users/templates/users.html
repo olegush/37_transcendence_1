@@ -1,0 +1,22 @@
+{% extends 'main.html' %}
+{% block title %}wall{% endblock %}
+{% load static %}
+
+{% block content %}
+
+    <div class="col-md-8 blog-main">
+      <h1>All users</h1>
+      {% for user in customuser_list %}
+        <div class="d-inline-block m-3">
+          {% if user.image.url != '' %}
+            <p ><img src="{{ user.image.url }}" style="height:150px;"></p>
+          {% else %}
+            <p ><img src="{% static "images/default_avatar.png" %}" style="height:150px;"></p>
+          {% endif %}
+          <h2 class="blog-post-title"><a href="{{ user.get_absolute_url }}">{{ user.name }}</a></h2>
+          <p class="blog-post-meta"></p>
+        </div><!-- /.blog-post -->
+      {% endfor %}
+    </div><!-- /.blog-main -->
+
+{% endblock %}
