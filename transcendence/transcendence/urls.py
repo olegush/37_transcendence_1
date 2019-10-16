@@ -7,20 +7,21 @@ from users import views
 
 
 urlpatterns = [
-    path('', views.DisplayWall.as_view(), name='index'),
+    path('', views.MyPostsList.as_view(), name='index'),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('id<int:pk>/', views.DisplayUser.as_view(), name='user'),
+    path('id<int:pk>/', views.UserDisplay.as_view(), name='user'),
     path('id<int:pk>/add_to_friends/', views.UserAddToFriends.as_view()),
     path('id<int:pk>/remove_from_friends/', views.UserRemoveFromFriends.as_view()),
     path('profile/', views.UserUpdate.as_view(), name='profile'),
-    path('wall/', views.DisplayWall.as_view(), name='wall'),
-    path('subscriptions/', views.DisplaySubscriptions.as_view(), name='wall'),
-    path('posts/', views.PostListView.as_view(), name='posts'),
-    path('post/<int:pk>/', views.PostDetailView.as_view(), name='post'),
+    path('my_posts/', views.MyPostsList.as_view(), name='my_posts'),
+    path('subscriptions/', views.SubscriptionsList.as_view(), name='subscriptions'),
+    path('all_posts/', views.AllPostsList.as_view(), name='posts'),
+    path('post/<int:pk>/', views.PostDetail.as_view(), name='post'),
     path('post_add/', views.PostAdd.as_view(), name='post-add'),
+    path('post/<int:pk>/markasread/', views.PostMarkAsRead.as_view(), name='post-mark-as-read'),
     path('users/', views.UsersList.as_view(), name='users'),
-    path('author/<int:pk>', views.PostListbyAuthorView.as_view(), name='posts-by-author'),
+    path('author/<int:pk>', views.PostListbyAuthor.as_view(), name='posts-by-author'),
 
 
 ]
