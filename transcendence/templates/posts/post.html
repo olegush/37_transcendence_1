@@ -7,7 +7,7 @@
   <p class="blog-post-meta">Опубликовано: {{ post.post_date }}</p>
   <p class="blog-post-meta">Автор: <a href="{{ post.author.get_absolute_url }}">{{ post.author.name }}</a></p>
   <p style="white-space:pre-wrap;">{{ post.description }}</p>
-  <form action="bookmark/"  method="post">
+  <form action="{% url 'post-to-bookmark' post.id %}"  method="post">
   {% if bookmarked %}
       {% csrf_token %}
       {{ form.as_p }}

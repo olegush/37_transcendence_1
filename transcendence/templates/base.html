@@ -49,8 +49,8 @@
           Common area
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="/users/">All users</a>
-          <a class="dropdown-item" href="/all_posts/">All posts</a>
+          <a class="dropdown-item" href="{% url 'users' %}">All users</a>
+          <a class="dropdown-item" href="{% url 'all-posts' %}">All posts</a>
         </div>
       </li>
       {% if request.user.is_authenticated %}
@@ -59,11 +59,11 @@
           My area
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="/my_posts/">My wall</a>
-          <a class="dropdown-item" href="/subscriptions/">My subscriptions</a>
-          <a class="dropdown-item" href="/bookmarks/">My bookmarks</a>
-          <a class="dropdown-item" href="/post_add/">Add a post</a>
-          <a class="dropdown-item" href="/profile/">Edit profile</a>
+          <a class="dropdown-item" href="{% url 'my-posts' %}">My wall</a>
+          <a class="dropdown-item" href="{% url 'subscriptions' %}">My subscriptions</a>
+          <a class="dropdown-item" href="{% url 'bookmarks' %}">My bookmarks</a>
+          <a class="dropdown-item" href="{% url 'post-add' %}">Add a post</a>
+          <a class="dropdown-item" href="{% url 'profile' %}">Edit profile</a>
         </div>
       </li>
       <li class="nav-item active"><a class="nav-link" href="{% url 'logout'%}">Logout</a></li>
