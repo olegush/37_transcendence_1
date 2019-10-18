@@ -1,4 +1,5 @@
 import os
+from typing import Dict, List, Tuple, Union
 
 from environs import Env
 import sentry_sdk
@@ -137,3 +138,23 @@ class Dev(Configuration):
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
     MEDIA_URL = env('MEDIA_URL')
     MEDIA_ROOT = os.path.join(BASE_DIR, env('MEDIA_ROOT'))
+
+    # Security
+    # https://docs.djangoproject.com/en/2.2/topics/security/
+
+    SESSION_COOKIE_HTTPONLY = True
+    CSRF_COOKIE_HTTPONLY = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+
+    X_FRAME_OPTIONS = 'DENY'
+
+    # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy#Syntax
+    REFERRER_POLICY = 'no-referrer'
+
+    # https://github.com/adamchainz/django-feature-policy#setting
+    FEATURE_POLICY: Dict[str, Union[str, List[str]]] = {}  # noqa: TAE002
+
+
+    # Timeouts
+    EMAIL_TIMEOUT = 5
