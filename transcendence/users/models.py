@@ -59,10 +59,9 @@ class Post(models.Model):
         return f'{self.pk}'
 
 
-class Status(models.Model):
+class Bookmark(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
-    read = models.BooleanField(default=True)
 
     def __str__(self):
-        return f'pk: {self.pk}, user: {self.user}, post: {self.post}, read: {self.read}'
+        return f'pk: {self.pk}, user: {self.user}, post: {self.post}'

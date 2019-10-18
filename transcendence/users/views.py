@@ -7,10 +7,10 @@ from django.urls import reverse
 from django.forms.models import model_to_dict
 from django.db.models import F, Q, Case, When
 
-from users.models import CustomUser, Post, Status
+from users.models import CustomUser, Post, Bookmark
 from .forms import ProfileForm, PostForm
 
-Status.objects.all()
+
 class MyPostsList(LoginRequiredMixin, ListView):
     model = Post
     paginate_by = 10
@@ -27,10 +27,22 @@ class SubscriptionsList(LoginRequiredMixin, ListView):
     template_name = 'subscriptions.html'
 
     def get_queryset(self):
-        user_id = self.request.user.id
-        author = CustomUser.objects.get(pk=user_id)
+        user = self.request.user
+        author = CustomUser.objects.get(pk=user.id)
         posts = Post.objects.filter(author__in=author.friends.all())
-        return posts.annotate(status__read=F('status__read'))
+        return posts
+
+
+class BookmarksList(LoginRequiredMixin, ListView):
+    model = Post
+    paginate_by = 10
+    template_name = 'bookmarks.html'
+
+    def get_queryset(self):
+        user = self.request.user
+        author = CustomUser.objects.get(pk=user.id)
+        posts = Post.objects.filter(bookmark__user=user)
+        return posts
 
 
 class AllPostsList(ListView):
@@ -40,14 +52,12 @@ class AllPostsList(ListView):
 
     def get_queryset(self):
         user = self.request.user
+        print(user.id)
         posts = Post.objects.all()
-        if user.is_authenticated:
-            status_case = Case(When(status__user=user, then='status__read'))
-            posts = posts.annotate(status__read=status_case)
         return posts
 
 
-class PostDetail(DetailView):
+class PostDetail(LoginRequiredMixin, DetailView):
     model = Post
     template_name = 'post.html'
 
@@ -55,10 +65,7 @@ class PostDetail(DetailView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         post_id = context['post'].id
-        if user.is_authenticated:
-            context['readby'] = Status.objects.filter(user=user, post=post_id).first()
-        else:
-            context['readby'] = 'AnonymousUser'
+        context['bookmarked'] = Bookmark.objects.filter(user=user, post=post_id).first()
         return context
 
 
@@ -77,7 +84,7 @@ class PostListbyAuthor(ListView):
     def get_queryset(self):
         author = Author.objects.get(pk=self.kwargs['pk'])
         posts = Post.objects.filter(author=author)
-        return posts.annotate(status__read=F('status__read'))
+        return posts
 
 
 class PostAdd(LoginRequiredMixin, CreateView):
@@ -97,21 +104,19 @@ class PostAdd(LoginRequiredMixin, CreateView):
         form.instance.author = CustomUser.objects.get(pk=id)
         if form.is_valid():
             new_post = form.save()
-            #TODO !!!!!!!!!
             return redirect('post', pk=new_post.id)
         return render(request, self.template_name, {'form': form, 'pk': request.user.pk})
 
 
-class PostMarkAsRead(LoginRequiredMixin, CreateView):
-    model = Status
+class PostToBookmark(LoginRequiredMixin, CreateView):
+    model = Bookmark
     fields = []
-    #form = StatusForm
 
     def form_valid(self, form):
         post_id = self.kwargs['pk']
         user = self.request.user
-        read_post = Post.objects.select_related('author').get(pk=post_id)
-        Status.objects.create(user=user, post=read_post, read=True)
+        read_post = Post.objects.get(pk=post_id)
+        Bookmark.objects.create(user=user, post=read_post,)
         return redirect('post', pk=post_id)
 
 
@@ -135,7 +140,7 @@ class UserDisplay(DetailView):
         me = self.request.user
         author = CustomUser.objects.get(pk=id)
         posts = Post.objects.filter(author=author)
-        context['posts'] = posts.annotate(status__read=F('status__read'))
+        context['posts'] = posts
         context['user'] = get_object_or_404(CustomUser, id = id)
         context['is_friend'] = me.is_authenticated and me.friends.filter(pk=id).exists()
         return context

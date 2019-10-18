@@ -7,20 +7,16 @@
   <p class="blog-post-meta">Опубликовано: {{ post.post_date }}</p>
   <p class="blog-post-meta">Автор: <a href="{{ post.author.get_absolute_url }}">{{ post.author.name }}</a></p>
   <p style="white-space:pre-wrap;">{{ post.description }}</p>
-  {% if readby != 'AnonymousUser' %}
-    {% if readby %}
-      <form action="markasread/"  method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" class="btn btn-outline-primary mt-3" value="Прочитано" disabled/>
-      </form>
-    {% else %}
-      <form action="markasread/"  method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" class="btn btn-outline-primary mt-3" value="Пометить прочитанным">
-      </form>
-    {% endif %}
+  <form action="bookmark/"  method="post">
+  {% if bookmarked %}
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" class="btn btn-outline-primary mt-3" value="В избранном" disabled/>
+  {% else %}
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" class="btn btn-outline-primary mt-3" value="Добавить в избранное">
   {% endif %}
+  </form>
   </div>
 {% endblock %}
