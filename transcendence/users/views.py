@@ -14,7 +14,7 @@ from users.forms import ProfileForm
 class UsersList(ListView):
     model = CustomUser
     paginate_by = 10
-    template_name = 'users.html'
+    template_name = 'users/users.html'
 
     def get_queryset(self):
         return CustomUser.objects.exclude(pk=self.request.user.id)
@@ -22,7 +22,7 @@ class UsersList(ListView):
 
 class UserDisplay(DetailView):
     model = CustomUser
-    template_name = 'user.html'
+    template_name = 'users/user.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -31,8 +31,7 @@ class UserDisplay(DetailView):
         posts = Post.objects.filter(author=CustomUser.objects.get(pk=user_id))
         context['posts'] = posts
         context['user'] = get_object_or_404(CustomUser, id=user_id)
-        is_friend = me.friends.filter(pk=user_id).exists()
-        context['is_friend'] = me.is_authenticated and is_friend
+        context['is_friend'] = me.is_authenticated and me.friends.filter(pk=user_id).exists()
         return context
 
 
@@ -64,7 +63,7 @@ class UserUpdate(LoginRequiredMixin, UpdateView):
     model = CustomUser
     form = ProfileForm
     fields = ['name', 'description', 'image']
-    template_name = 'profile.html'
+    template_name = 'users/profile.html'
 
     def get(self, request, *args, **kwargs):
         user = get_object_or_404(CustomUser, id=request.user.id)

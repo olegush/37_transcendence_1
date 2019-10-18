@@ -20,7 +20,6 @@ class Dev(Configuration):
     # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
     # Quick-start development settings - unsuitable for production
     # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -63,9 +62,14 @@ class Dev(Configuration):
     TEMPLATES = [
         {
             'BACKEND': 'django.template.backends.django.DjangoTemplates',
-            'DIRS': [],
-            'APP_DIRS': True,
+            'DIRS': [
+                    os.path.normpath(os.path.join(BASE_DIR, 'templates')),
+                ],
             'OPTIONS': {
+                "loaders": [
+                "django.template.loaders.filesystem.Loader",
+                "django.template.loaders.app_directories.Loader",
+                ],
                 'context_processors': [
                     'django.template.context_processors.debug',
                     'django.template.context_processors.request',

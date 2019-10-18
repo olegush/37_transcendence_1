@@ -12,7 +12,7 @@ from posts.forms import PostForm
 class MyPostsList(LoginRequiredMixin, ListView):
     model = Post
     paginate_by = 10
-    template_name = 'my_posts.html'
+    template_name = 'posts/my_posts.html'
 
     def get_queryset(self):
         user_id = self.request.user.id
@@ -22,7 +22,7 @@ class MyPostsList(LoginRequiredMixin, ListView):
 class SubscriptionsList(LoginRequiredMixin, ListView):
     model = Post
     paginate_by = 10
-    template_name = 'subscriptions.html'
+    template_name = 'posts/subscriptions.html'
 
     def get_queryset(self):
         user = self.request.user
@@ -33,7 +33,7 @@ class SubscriptionsList(LoginRequiredMixin, ListView):
 class BookmarksList(LoginRequiredMixin, ListView):
     model = Post
     paginate_by = 10
-    template_name = 'bookmarks.html'
+    template_name = 'posts/bookmarks.html'
 
     def get_queryset(self):
         user = self.request.user
@@ -43,7 +43,7 @@ class BookmarksList(LoginRequiredMixin, ListView):
 class AllPostsList(ListView):
     model = Post
     paginate_by = 10
-    template_name = 'all_posts.html'
+    template_name = 'posts/all_posts.html'
 
     def get_queryset(self):
         return Post.objects.all()
@@ -51,7 +51,7 @@ class AllPostsList(ListView):
 
 class PostDetail(LoginRequiredMixin, DetailView):
     model = Post
-    template_name = 'post.html'
+    template_name = 'posts/post.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -73,7 +73,7 @@ class PostAdd(LoginRequiredMixin, CreateView):
     model = Post
     form = PostForm
     fields = ['name', 'description']
-    template_name = 'post_add.html'
+    template_name = 'posts/post_add.html'
 
     def get(self, request, *args, **kwargs):
         form = self.form()
