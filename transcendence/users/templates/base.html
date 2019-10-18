@@ -44,24 +44,33 @@
 
   <div class="collapse navbar-collapse" id="navbarsExampleDefault">
     <ul class="navbar-nav mr-auto">
-        <li class="nav-item active"><a class="nav-link" href="/users/">[ All users</a></li>
-        <li class="nav-item active"><a class="nav-link" href="/all_posts/">All posts ]</a></li>
-    </ul>
-
-    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Common area
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/users/">All users</a>
+          <a class="dropdown-item" href="/all_posts/">All posts</a>
+        </div>
+      </li>
       {% if request.user.is_authenticated %}
-        <li class="nav-item active"><a class="nav-link" href="/my_posts/">[ My wall</a></li>
-        <li class="nav-item active"><a class="nav-link" href="/subscriptions/">My subscriptions ]</a></li>
-      {% endif %}
-    </ul>
-    <ul class="navbar-nav mr-auto">
-      {% if request.user.is_authenticated %}
-        <li class="nav-item active"><a class="nav-link" href="/post_add/">[ Add a post</a></li>
-        <li class="nav-item active"><a class="nav-link" href="/profile/">Edit profile</a></li>
-        <li class="nav-item active"><a class="nav-link" href="{% url 'logout'%}">Logout ]</a></li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          My area
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/my_posts/">My wall</a>
+          <a class="dropdown-item" href="/subscriptions/">My subscriptions</a>
+          <a class="dropdown-item" href="/bookmarks/">My bookmarks</a>
+          <a class="dropdown-item" href="/post_add/">Add a post</a>
+          <a class="dropdown-item" href="/profile/">Edit profile</a>
+        </div>
+      </li>
+      <li class="nav-item active"><a class="nav-link" href="{% url 'logout'%}">Logout</a></li>
       {% else %}
-        <li class="nav-item active"><a class="nav-link" href="{% url 'login'%}">[ Login ]</a></li>
+      <li class="nav-item active"><a class="nav-link" href="{% url 'login'%}">Login</a></li>
       {% endif %}
+
     </ul>
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
