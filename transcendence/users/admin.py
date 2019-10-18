@@ -3,8 +3,8 @@ from django.contrib.auth.admin import UserAdmin
 from django.db.models import Count
 from django.utils.translation import gettext_lazy as _
 
-from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import CustomUser, Post
+from users.forms import CustomUserCreationForm, CustomUserChangeForm
+from users.models import CustomUser
 
 
 class FriendsQuantity(admin.SimpleListFilter):
@@ -62,7 +62,3 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
-
-@admin.register(Post)
-class BlogAdmin(admin.ModelAdmin):
-    list_display = ('name', 'author', 'post_date')

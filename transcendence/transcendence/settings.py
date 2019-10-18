@@ -45,6 +45,7 @@ class Dev(Configuration):
         'django.contrib.messages',
         'django.contrib.staticfiles',
         'users',
+        'posts',
     ]
 
     MIDDLEWARE = [
