@@ -1,11 +1,8 @@
 from sentry_sdk import capture_exception
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.views.generic import DetailView, ListView
-from django.views.generic.edit import UpdateView, CreateView
+from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
-from django.forms.models import model_to_dict
-from django.db.models import F, Q, Case, When
 
 from users.models import CustomUser
 from posts.models import Post, Bookmark
@@ -30,8 +27,7 @@ class SubscriptionsList(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user = self.request.user
         author = CustomUser.objects.get(pk=user.id)
-        posts = Post.objects.filter(author__in=author.friends.all())
-        return posts
+        return Post.objects.filter(author__in=author.friends.all())
 
 
 class BookmarksList(LoginRequiredMixin, ListView):
@@ -41,9 +37,7 @@ class BookmarksList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = self.request.user
-        author = CustomUser.objects.get(pk=user.id)
-        posts = Post.objects.filter(bookmark__user=user)
-        return posts
+        return Post.objects.filter(bookmark__user=user)
 
 
 class AllPostsList(ListView):
@@ -52,10 +46,7 @@ class AllPostsList(ListView):
     template_name = 'all_posts.html'
 
     def get_queryset(self):
-        user = self.request.user
-        print(user.id)
-        posts = Post.objects.all()
-        return posts
+        return Post.objects.all()
 
 
 class PostDetail(LoginRequiredMixin, DetailView):
@@ -66,47 +57,38 @@ class PostDetail(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         post_id = context['post'].id
-        context['bookmarked'] = Bookmark.objects.filter(user=user, post=post_id).first()
+        context['bookmarked'] = Bookmark.objects.filter(
+            user=user, post=post_id,
+            ).first()
         return context
-
-
-class PostListbyAuthor(ListView):
-    model = Post
-    paginate_by = 10
-    template_name = 'post_list_by_author.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user_id = self.request.user.id
-        context['author'] = Author.objects.get(pk=self.kwargs['pk'])
-        context['logged_used'] = Author.objects.get(user=user_id)
-        return context
-
-    def get_queryset(self):
-        author = Author.objects.get(pk=self.kwargs['pk'])
-        posts = Post.objects.filter(author=author)
-        return posts
 
 
 class PostAdd(LoginRequiredMixin, CreateView):
+    """A new post.
+
+    Adds a new post and redirects to post page.
+
+    """
+
     model = Post
     form = PostForm
     fields = ['name', 'description']
     template_name = 'post_add.html'
-    success_url = '/thanks/'
 
     def get(self, request, *args, **kwargs):
         form = self.form()
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
-        id = request.user.id
+        user_id = request.user.id
         form = self.form(request.POST)
-        form.instance.author = CustomUser.objects.get(pk=id)
+        form.instance.author = CustomUser.objects.get(pk=user_id)
         if form.is_valid():
             new_post = form.save()
             return redirect('post', pk=new_post.id)
-        return render(request, self.template_name, {'form': form, 'pk': request.user.pk})
+        return render(
+            request, self.template_name, {'form': form, 'pk': request.user.pk},
+            )
 
 
 class PostToBookmark(LoginRequiredMixin, CreateView):
@@ -117,5 +99,5 @@ class PostToBookmark(LoginRequiredMixin, CreateView):
         post_id = self.kwargs['pk']
         user = self.request.user
         read_post = Post.objects.get(pk=post_id)
-        Bookmark.objects.create(user=user, post=read_post,)
+        Bookmark.objects.create(user=user, post=read_post)
         return redirect('post', pk=post_id)

@@ -1,11 +1,10 @@
 from sentry_sdk import capture_exception
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView, ListView
-from django.views.generic.edit import UpdateView, CreateView
+from django.views.generic.edit import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.forms.models import model_to_dict
-from django.db.models import F, Q, Case, When
 
 from users.models import CustomUser
 from posts.models import Post
@@ -27,14 +26,13 @@ class UserDisplay(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user_id = self.request.user.id
-        id = self.object.pk
+        user_id = self.object.pk
         me = self.request.user
-        author = CustomUser.objects.get(pk=id)
-        posts = Post.objects.filter(author=author)
+        posts = Post.objects.filter(author=CustomUser.objects.get(pk=user_id))
         context['posts'] = posts
-        context['user'] = get_object_or_404(CustomUser, id = id)
-        context['is_friend'] = me.is_authenticated and me.friends.filter(pk=id).exists()
+        context['user'] = get_object_or_404(CustomUser, id=user_id)
+        is_friend = me.friends.filter(pk=user_id).exists()
+        context['is_friend'] = me.is_authenticated and is_friend
         return context
 
 
@@ -61,13 +59,15 @@ class UserRemoveFromFriends(LoginRequiredMixin, UpdateView):
 
 
 class UserUpdate(LoginRequiredMixin, UpdateView):
+    """Updates user."""
+
     model = CustomUser
     form = ProfileForm
     fields = ['name', 'description', 'image']
     template_name = 'profile.html'
 
     def get(self, request, *args, **kwargs):
-        user = get_object_or_404(CustomUser, id = request.user.id)
+        user = get_object_or_404(CustomUser, id=request.user.id)
         form = self.form(initial=model_to_dict(user))
         return render(request, self.template_name, {'form': form})
 
@@ -76,4 +76,6 @@ class UserUpdate(LoginRequiredMixin, UpdateView):
         if form.is_valid():
             form.save()
             return render(request, self.template_name, {'form': form})
-        return render(request, self.template_name, {'form': form, 'pk': user.pk})
+        return render(
+            request, self.template_name, {'form': form, 'pk': request.user.pk},
+            )
