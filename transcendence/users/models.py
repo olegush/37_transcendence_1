@@ -29,7 +29,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     def __str__(self):
-        return '{0}: {1}'.format(self.id, self.email)
+        return f'{self.email}'
 
     def get_absolute_url(self):
         return reverse('user', kwargs={'pk': self.pk})
