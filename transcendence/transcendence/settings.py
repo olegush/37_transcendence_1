@@ -128,7 +128,7 @@ class Dev(Configuration):
 
     LANGUAGE_CODE = 'en-us'
 
-    TIME_ZONE = 'UTC'
+    TIME_ZONE = 'Europe/Moscow'
 
     USE_I18N = True
 
@@ -161,5 +161,11 @@ class Dev(Configuration):
     FEATURE_POLICY: Dict[str, Union[str, List[str]]] = {}  # noqa: TAE002
 
 
-    # Timeouts
-    EMAIL_TIMEOUT = 5
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    EMAIL_FILE_PATH = 'tmp/emails'
+    #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    #EMAIL_HOST = env('EMAIL_HOST')
+    #EMAIL_PORT = env('EMAIL_PORT')
+    #EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+    #EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+    #EMAIL_USE_TLS = True

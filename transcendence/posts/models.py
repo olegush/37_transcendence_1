@@ -1,5 +1,5 @@
-from datetime import datetime
-
+from django.utils import timezone
+import pytz
 from django.db import models
 from django.core.mail import send_mail
 from django.conf import settings
@@ -11,7 +11,7 @@ class Post(models.Model):
     name = models.CharField(max_length=200)
     author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     description = models.TextField(max_length=3000)
-    post_date = models.DateTimeField(default=datetime.now)
+    post_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ["-post_date"]
@@ -24,9 +24,8 @@ class Post(models.Model):
         user = CustomUser.objects.get(id = self.author_id)
         subject = f'New post added by {user}'
         message = f'{user} just added <a href="/blog/post/{self.id}/">new post</a>'
-        # TODO !!!
-        #recipient_list = [author.email  for author in CustomUser.objects.all() if user in author.friends.all()]
-        #send_mail(subject, message, settings.EMAIL_HOST_USER, recipient_list )
+        recipient_list = [author.email  for author in CustomUser.objects.all() if user in author.friends.all()]
+        send_mail(subject, message, settings.EMAIL_HOST_USER, recipient_list )
 
     def __str__(self):
         return f'{self.pk}'
