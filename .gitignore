@@ -62,3 +62,7 @@ target/
 mytests.py
 info/
 media/
+fabfile.py
+.travis.yml
+/.circleci
+/conf_templates

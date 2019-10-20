@@ -40,7 +40,7 @@ def bootstrap(c):
 
     # Create postgres DB.
     if not db_exists(c, PG_DB):
-        c.run(f'sudo -i -u postgres createdb "{PG_DB}"')
+        c.run(f'sudo -i -u postgres createdb "{PG_DB}";')
         print(f'{PG_DB} created')
 
     # Create postgres user.
