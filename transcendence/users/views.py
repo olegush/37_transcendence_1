@@ -1,4 +1,3 @@
-from sentry_sdk import capture_exception
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import UpdateView
@@ -12,6 +11,8 @@ from users.forms import ProfileForm
 
 
 class UsersList(ListView):
+    """Display all users list."""
+
     model = CustomUser
     paginate_by = 10
     template_name = 'users/users.html'
@@ -21,6 +22,8 @@ class UsersList(ListView):
 
 
 class UserDisplay(DetailView):
+    """Display user page with his posts."""
+
     model = CustomUser
     template_name = 'users/user.html'
 
@@ -36,6 +39,8 @@ class UserDisplay(DetailView):
 
 
 class UserAddToFriends(LoginRequiredMixin, UpdateView):
+    """Adds user to friends."""
+
     model = CustomUser
     fields = []
 
@@ -47,6 +52,8 @@ class UserAddToFriends(LoginRequiredMixin, UpdateView):
 
 
 class UserRemoveFromFriends(LoginRequiredMixin, UpdateView):
+    """Remove user from friends."""
+
     model = CustomUser
     fields = []
 
@@ -58,7 +65,7 @@ class UserRemoveFromFriends(LoginRequiredMixin, UpdateView):
 
 
 class UserUpdate(LoginRequiredMixin, UpdateView):
-    """Updates user."""
+    """Updates user profile."""
 
     model = CustomUser
     form = ProfileForm

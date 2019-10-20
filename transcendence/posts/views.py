@@ -1,4 +1,3 @@
-from sentry_sdk import capture_exception
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView
@@ -10,6 +9,8 @@ from posts.forms import PostForm
 
 
 class MyPostsList(LoginRequiredMixin, ListView):
+    """Display user's posts list."""
+
     model = Post
     paginate_by = 10
     template_name = 'posts/my_posts.html'
@@ -20,6 +21,8 @@ class MyPostsList(LoginRequiredMixin, ListView):
 
 
 class SubscriptionsList(LoginRequiredMixin, ListView):
+    """Display user's subscriptions list."""
+
     model = Post
     paginate_by = 10
     template_name = 'posts/subscriptions.html'
@@ -31,6 +34,8 @@ class SubscriptionsList(LoginRequiredMixin, ListView):
 
 
 class BookmarksList(LoginRequiredMixin, ListView):
+    """Display user's bookmarks list."""
+
     model = Post
     paginate_by = 10
     template_name = 'posts/bookmarks.html'
@@ -41,6 +46,8 @@ class BookmarksList(LoginRequiredMixin, ListView):
 
 
 class AllPostsList(ListView):
+    """Display all posts list."""
+
     model = Post
     paginate_by = 10
     template_name = 'posts/all_posts.html'
@@ -50,6 +57,8 @@ class AllPostsList(ListView):
 
 
 class PostDetail(LoginRequiredMixin, DetailView):
+    """Display detailed post with bookmark button."""
+
     model = Post
     template_name = 'posts/post.html'
 
@@ -92,6 +101,8 @@ class PostAdd(LoginRequiredMixin, CreateView):
 
 
 class PostToBookmark(LoginRequiredMixin, CreateView):
+    """Adds a post to user's bookmarks."""
+
     model = Bookmark
     fields = []
 
