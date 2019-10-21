@@ -1,4 +1,4 @@
-# Transcendence project
+# TP project
 
 Blog network prototype based on [Django](https://docs.djangoproject.com/) class based views. Realized: custom user model with "friends" features, extendable blog system with "bookmarks" features.
 
@@ -9,14 +9,12 @@ Blog network prototype based on [Django](https://docs.djangoproject.com/) class 
 
 ```bash
 
-virtualenv virtualenv_folder_name
-source virtualenv_folder_name/bin/activate
+virtualenv env
+source env/bin/activate
 python3 -m pip install -r requirements.txt
 ```
 
-2. For errors logging register account on [sentry.io](https://sentry.io/), connect with Django and get your SENTRY DSN KEY.
-
-3. Put vulnerable parameters to **.env** file.
+2. Put vulnerable parameters to **.env** file.
 
 ```bash
 DEBUG=False
@@ -36,9 +34,8 @@ EMAIL_PORT=smtp_port
 EMAIL_HOST_PASSWORD=password
 ```
 
-4. Run Django
+3. Run Django
 ```bash
 python3 manage.py runserver
 ```
-
-5. Check it on http://127.0.0.1:8000/
+and check it on http://127.0.0.1:8000/
