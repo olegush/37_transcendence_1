@@ -11,7 +11,7 @@ class UserManagersTests(TestCase):
 
     def test_create_user(self):
         User = get_user_model()
-        user = User.objects.create_user(email='normal@user.com', password='foo')
+        user = User.objects.create_user('normal@user.com', 'pwd12345')
         self.assertEqual(user.email, 'normal@user.com')
         self.assertTrue(user.is_active)
         self.assertFalse(user.is_staff)
@@ -32,7 +32,7 @@ class UserManagersTests(TestCase):
 
     def test_create_superuser(self):
         User = get_user_model()
-        admin_user = User.objects.create_superuser('super@user.com', 'foo')
+        admin_user = User.objects.create_superuser('super@user.com', 'pwd12345')
         self.assertEqual(admin_user.email, 'super@user.com')
         self.assertTrue(admin_user.is_active)
         self.assertTrue(admin_user.is_staff)
@@ -48,8 +48,13 @@ class UserManagersTests(TestCase):
                 email='super@user.com', password='foo', is_superuser=False,
                 )
 
+
 class UserViewsTests(TestCase):
-    """Tests Post views."""
+    """Tests User views."""
+
+    def test_redirect_if_not_logged_in(self):
+        resp_profile = self.client.get(reverse('profile'))
+        self.assertRedirects(resp_profile, '/accounts/login/?next=/profile/')
 
     def test_all_users_list(self):
         resp_reverse = self.client.get(reverse('users'))
@@ -58,7 +63,44 @@ class UserViewsTests(TestCase):
         self.assertEqual(resp_url.status_code, 200)
 
     def test_user_form_update(self):
-        user = CustomUser.objects.create(email='user@test.com', name='name', description='description')
-        data = {'email': 'email', 'name': 'new name', 'description': 'new description'}
-        form = ProfileForm(data=data)
+        form = ProfileForm(
+            data={'name': 'new name', 'description': 'new description'},
+            )
         self.assertTrue(form.is_valid())
+
+    def test_user_add_to_friends(self):
+        user = CustomUser.objects.create(
+            email='user@test.com',
+            name='name',
+            description='description',
+            )
+        friend = CustomUser.objects.create(
+            email='friend@test.com',
+            name='friend name',
+            description='friend description',
+            )
+        friend2 = CustomUser.objects.create(
+            email='friend2@test.com',
+            name='friend name',
+            description='friend description',
+            )
+        user.friends.add(friend)
+        user = CustomUser.objects.get(email='user@test.com')
+        self.assertTrue(friend in user.friends.all())
+        self.assertFalse(friend2 in user.friends.all())
+
+    def test_user_remove_from_friends(self):
+        user = CustomUser.objects.create(
+            email='user@test.com',
+            name='name',
+            description='description',
+            )
+        friend = CustomUser.objects.create(
+            email='friend@test.com',
+            name='friend name',
+            description='friend description',
+            )
+        user.friends.add(friend)
+        user = CustomUser.objects.get(email='user@test.com')
+        user.friends.remove(friend)
+        self.assertFalse(friend in user.friends.all())

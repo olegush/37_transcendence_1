@@ -1,8 +1,5 @@
-import pytz
-from django.utils import timezone
-
 from django.urls import reverse
-from django.test import TestCase, Client
+from django.test import TestCase
 
 from users.models import CustomUser
 from posts.models import Post, Bookmark
@@ -40,7 +37,11 @@ class PostViewsTests(TestCase):
         author.set_password('Pwd-12345')
         author.save()
         for post_num in range(number_of_posts):
-            Post.objects.create(name=f'post #{post_num}', author=author, description = f'description for post #{post_num}')
+            Post.objects.create(
+                name=f'post #{post_num}',
+                author=author,
+                description=f'description for post #{post_num}',
+                )
 
     def test_all_posts_list(self):
         resp_reverse = self.client.get(reverse('all-posts'))
@@ -53,7 +54,9 @@ class PostViewsTests(TestCase):
         resp_subscriptions = self.client.get(reverse('subscriptions'))
         resp_bookmarks = self.client.get(reverse('bookmarks'))
         self.assertRedirects(resp_my_posts, '/accounts/login/?next=/my_posts/')
-        self.assertRedirects(resp_subscriptions, '/accounts/login/?next=/subscriptions/')
+        self.assertRedirects(
+            resp_subscriptions, '/accounts/login/?next=/subscriptions/',
+            )
         self.assertRedirects(resp_bookmarks, '/accounts/login/?next=/bookmarks/')
 
     def test_my_posts_list(self):
@@ -70,7 +73,10 @@ class PostViewsTests(TestCase):
 
     def test_form_post_adding(self):
         author = CustomUser.objects.get(email='user@test.com')
-        post = Post.objects.create(name='post 1', author=author, description='description post')
-        data = {'name': post.name, 'description': post.description,}
-        form = PostForm(data=data)
+        post = Post.objects.create(
+            name='post 1', author=author, description='description post',
+            )
+        form = PostForm(
+            data={'name': post.name, 'description': post.description},
+            )
         self.assertTrue(form.is_valid())
