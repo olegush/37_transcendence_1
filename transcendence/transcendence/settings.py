@@ -2,17 +2,10 @@ import os
 from typing import Dict, List, Tuple, Union
 
 from environs import Env
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 from configurations import Configuration
 
 env = Env()
 env.read_env()
-
-sentry_sdk.init(
-    dsn=env('SENTRY_DSN'),
-    integrations=[DjangoIntegration()]
-)
 
 
 class Dev(Configuration):
@@ -80,7 +73,6 @@ class Dev(Configuration):
         },
     ]
 
-    WSGI_APPLICATION = f'{env("DIR_PACKAGE")}.wsgi.application'
 
 
     # Database

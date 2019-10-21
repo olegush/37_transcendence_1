@@ -1,6 +1,6 @@
 # Transcendence project
 
-[Social network prototype](http://167.71.13.7/) based on [Django](https://docs.djangoproject.com/) with [Bootstrap](https://getbootstrap.com/). Deploy process coded on [fabric](http://docs.fabfile.org/) with [GitHub](https://github.com/). For errors logging used [sentry.io](https://sentry.io/).
+Blog network prototype based on [Django](https://docs.djangoproject.com/) class based views. Realized: custom user model with "friends" features, extendable blog system with "bookmarks" features.
 
 
 # How to Install
@@ -25,7 +25,15 @@ STATIC_URL=STATIC_URL
 STATIC_ROOT=STATIC_ROOT
 MEDIA_URL=MEDIA_URL
 MEDIA_ROOT=MEDIA_ROOT
-SENTRY_DSN=your_sentry_dsn_key
+SITE=127.0.0.1
+PG_USR=postgresql_user
+PG_PWD=postgresql_password
+PG_DB=postgresql_database
+DIR_PACKAGE=django_package_directory
+EMAIL_HOST=smtp_server_for_emails
+EMAIL_HOST_USER=email_from
+EMAIL_PORT=smtp_port
+EMAIL_HOST_PASSWORD=password
 ```
 
 4. Run Django
@@ -34,44 +42,3 @@ python3 manage.py runserver
 ```
 
 5. Check it on http://127.0.0.1:8000/
-
-
-# How to deploy
-
-1. Get server with Ubuntu LTS, for example on [digitalocean.com](https://cloud.digitalocean.com/)
-
-2. Add vulnerable parameters to **.env** file.
-
-```bash
-SITE=your_domain_or_ip
-PG_USR=postgresql_user
-PG_PWD=postgresql_password
-PG_DB=postgresql_database
-DATABASE_URL=postgres://postgresql_user:postgresql_password@localhost:5432/postgresql_database
-DIR_SOURCES=directory_with_your_sources
-DIR_PROJECT=django_project_directory
-DIR_PACKAGE=django_package_directory
-GITHUB_REPO=your_repository_url_on_github
-GITHUB_NAME=your_username_on_github
-GITHUB_EMAIL=your_email_on_github
-ENV_DIR=directory_with_your_remote_virtual_environment
-```
-
-3. For bootstrapping run **fabfile.py** with arguments:
-```bash
-fab --hosts=root@your_domain_or_ip bootstrap
-```
-
-4. For deploying:
-```bash
-fab --hosts=root@your_domain_or_ip deploy
-```
-
-5. Check out your site on http://your_domain_or_ip
-
-6. Make some changes in template, for example, push to GitHub, run deploy again and check it.
-
-
-# Project Goals
-
-The code is written for educational purposes. Training course for web-developers - [DEVMAN.org](https://devman.org)
