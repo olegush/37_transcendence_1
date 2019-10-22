@@ -35,6 +35,7 @@ class UserDisplay(DetailView):
         context['posts'] = posts
         context['user'] = get_object_or_404(CustomUser, id=user_id)
         context['is_friend'] = me.is_authenticated and me.friends.filter(pk=user_id).exists()
+        context['my_id'] = me.id
         return context
 
 
