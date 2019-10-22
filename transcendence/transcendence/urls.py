@@ -17,6 +17,7 @@ urlpatterns = [
     path('id<int:pk>/remove_from_friends/', user_views.UserRemoveFromFriends.as_view()),
     path('profile/', user_views.UserUpdate.as_view(), name='profile'),
     path('users/', user_views.UsersList.as_view(), name='users'),
+    path('chats/', chat_views.ChatsList.as_view(), name='chats'),
     path('chat/<int:id1>-<int:id2>/', chat_views.ChatRoom.as_view(), name='room'),
     path('my_posts/', posts_views.MyPostsList.as_view(), name='my-posts'),
     path('subscriptions/', posts_views.SubscriptionsList.as_view(), name='subscriptions'),
