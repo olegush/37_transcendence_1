@@ -23,6 +23,7 @@ urlpatterns = [
     path('post/<int:pk>/', posts_views.PostDetail.as_view(), name='post'),
     path('post_add/', posts_views.PostAdd.as_view(), name='post-add'),
     path('post/<int:pk>/bookmark/', posts_views.PostToBookmark.as_view(), name='post-to-bookmark'),
+    path('chat/', include('chat.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

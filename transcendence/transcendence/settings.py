@@ -30,15 +30,30 @@ class Dev(Configuration):
     # Application definition
 
     INSTALLED_APPS = [
+        'channels',
+        'users',
+        'posts',
+        'chat',
         'django.contrib.admin',
         'django.contrib.auth',
         'django.contrib.contenttypes',
         'django.contrib.sessions',
         'django.contrib.messages',
         'django.contrib.staticfiles',
-        'users',
-        'posts',
     ]
+
+    WSGI_APPLICATION = f'{env("DIR_PACKAGE")}.wsgi.application'
+
+    ASGI_APPLICATION = 'routing.application'
+
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts": [('127.0.0.1', 6379)],
+            },
+        },
+    }
 
     MIDDLEWARE = [
         'django.middleware.security.SecurityMiddleware',

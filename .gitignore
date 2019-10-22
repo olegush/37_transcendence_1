@@ -66,3 +66,4 @@ fabfile.py
 .travis.yml
 /.circleci
 /conf_templates
+/tmp
