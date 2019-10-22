@@ -1,6 +1,6 @@
 # TP project
 
-Blog network prototype based on [Django](https://docs.djangoproject.com/) class based views. Realized: custom user model with "friends" features, extendable blog system with "bookmarks" features.
+Blog network prototype based on [Django](https://docs.djangoproject.com/) class based views. Realized: custom user model with "friends" features, extendable blog system with "bookmarks" features. "Messages" features on progress in the [chat branch](https://github.com/olegush/37_transcendence_1/tree/chat).
 
 
 # How to Install
