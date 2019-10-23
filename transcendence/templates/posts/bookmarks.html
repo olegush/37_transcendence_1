@@ -4,12 +4,12 @@
 {% block container %}
 <div class="col-md-8 blog-main">
 <h1>My bookmarks</h1>
-{% if post_list %}
-  {% for post in post_list %}
+{% if bookmark_list %}
+  {% for bookmark in bookmark_list %}
     <div class="blog-post">
-      <h2 class="blog-post-title"><a href="{{ post.get_absolute_url }}">{{ post.name }}</a></h2>
-      <p class="blog-post-meta">{{post.post_date}} by <a href="{{ post.author.get_absolute_url }}">{{ post.author.name }} </a> </p>
-      <p>{{ post.description | truncatewords:"50" }} {% if post.status__read %} (прочитано) {% endif %}</p>
+      <h2 class="blog-post-title"><a href="{{ bookmark.post.get_absolute_url }}">{{ bookmark.post.name }}</a></h2>
+      <p class="blog-post-meta">{{bookmark.post.post_date}} by <a href="{{ post.author.get_absolute_url }}">{{ bookmark.post.author.name }} </a> </p>
+      <p>{{ bookmark.post.description | truncatewords:"50" }}</p>
     </div><!-- /.blog-post -->
   {% endfor %}
 {% else %}

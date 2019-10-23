@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -42,7 +42,7 @@ class BookmarksList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = self.request.user
-        return Post.objects.filter(bookmark__user=user)
+        return Bookmark.objects.filter(user=user)
 
 
 class AllPostsList(ListView):
@@ -109,6 +109,6 @@ class PostToBookmark(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         post_id = self.kwargs['pk']
         user = self.request.user
-        read_post = Post.objects.get(pk=post_id)
-        Bookmark.objects.create(user=user, post=read_post)
+        post = get_object_or_404(Post, id=post_id)
+        post.bookmarked.add(user)
         return redirect('post', pk=post_id)
