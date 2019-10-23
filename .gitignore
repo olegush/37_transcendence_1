@@ -64,5 +64,5 @@ info/
 media/
 fabfile.py
 .travis.yml
-/.circleci
-/conf_templates
+.circleci/
+conf_templates/
