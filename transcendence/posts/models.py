@@ -2,8 +2,6 @@ import pytz
 
 from django.utils import timezone
 from django.db import models
-from django.core.mail import send_mail
-from django.conf import settings
 from django.urls import reverse
 
 from users.models import CustomUser
@@ -21,14 +19,6 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('post', args=[str(self.id)])
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        user = CustomUser.objects.get(id = self.author_id)
-        subject = f'New post added by {user}'
-        message = f'{user} just added <a href="/blog/post/{self.id}/">new post</a>'
-        recipient_list = [author.email  for author in CustomUser.objects.all() if user in author.friends.all()]
-        send_mail(subject, message, settings.EMAIL_HOST_USER, recipient_list )
 
     def __str__(self):
         return f'pk: {self.pk}, name: {self.name}, author: {self.author},  description: {self.description},  bookmarked: {self.bookmarked},  post_date: {self.post_date}'

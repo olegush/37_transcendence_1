@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.mail import send_mail
+from django.conf import settings
 
 from users.models import CustomUser
 from posts.models import Post, Bookmark
@@ -90,10 +92,15 @@ class PostAdd(LoginRequiredMixin, CreateView):
 
     def post(self, request, *args, **kwargs):
         user_id = request.user.id
+        user_name = request.user.name
         form = self.form(request.POST)
         form.instance.author = CustomUser.objects.get(pk=user_id)
         if form.is_valid():
             new_post = form.save()
+            subject = f'New post added by {user_name}'
+            message = f'{user_name} just added <a href="/blog/post/{new_post.id}/">new post</a>'
+            recipient_list = [author.email  for author in CustomUser.objects.all() if request.user in author.friends.all()]
+            send_mail(subject, message, settings.EMAIL_HOST_USER, recipient_list)
             return redirect('post', pk=new_post.id)
         return render(
             request, self.template_name, {'form': form, 'pk': request.user.pk},
