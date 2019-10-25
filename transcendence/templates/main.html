@@ -13,7 +13,7 @@
 
     <h4 class="mt-3">{{ user.name }} {% if is_friend %}<sup><span class="badge badge-secondary">friend</span></sup>{% endif %}</h4>
     <p>{{ user.description }}</p>
-    <h5><a href="/chat/{{ my_id }}-{{ user.id }}/">Chat</a> with {{ user.name }}</h5>
+    <h5><a href="/chat/{{ user.id }}/">Chat</a> with {{ user.name }}</h5>
     <h5>{{ user.name }}'s friends</h5>
     <ul>
       {% for friend in user.friends.all %}
