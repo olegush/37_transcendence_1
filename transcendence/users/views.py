@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -45,11 +45,11 @@ class UserAddToFriends(LoginRequiredMixin, UpdateView):
     model = CustomUser
     fields = []
 
-    def get_success_url(self, **kwargs):
+    def form_valid(self, form):
         user = self.object
         me = get_object_or_404(CustomUser, id=self.request.user.id)
         me.friends.add(user)
-        return reverse('user', kwargs={'pk': user.pk})
+        return redirect('user', pk=user.pk)
 
 
 class UserRemoveFromFriends(LoginRequiredMixin, UpdateView):
@@ -58,11 +58,11 @@ class UserRemoveFromFriends(LoginRequiredMixin, UpdateView):
     model = CustomUser
     fields = []
 
-    def get_success_url(self, **kwargs):
+    def form_valid(self, form):
         user = self.object
         me = get_object_or_404(CustomUser, id=self.request.user.id)
         me.friends.remove(user)
-        return reverse('user', kwargs={'pk': user.pk})
+        return redirect('user', pk=user.pk)
 
 
 class UserUpdate(LoginRequiredMixin, UpdateView):
