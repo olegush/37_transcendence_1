@@ -12,7 +12,8 @@ then
 fi
 
 python manage.py flush --no-input
+python manage.py makemigrations --merge
 python manage.py migrate
-python manage.py collectstatic --no-input --clear
+echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('super@user.com', 'pwd12345')" | python manage.py shell
 
 exec "$@"

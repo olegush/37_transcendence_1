@@ -3,13 +3,13 @@ version: '3.6'
 services:
   web:
     build: ./transcendence
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python transcendence/manage.py runserver 0.0.0.0:8000
     volumes:
       - ./transcendence/:/usr/src/app/
     ports:
       - 8000:8000
     env_file:
-      - ./.env.dev
+      - ./.env
     depends_on:
       - db
   db:
