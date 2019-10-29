@@ -99,8 +99,8 @@ class Dev(Configuration):
             'NAME': env('PG_DB_NAME'),
             'USER': env('PG_USR'),
             'PASSWORD': env('PG_PWD'),
-            'HOST': 'localhost',
-            'PORT': '5432',
+            'HOST': env('PG_HOST'),
+            'PORT': env('PG_PORT'),
         }
     }
 
