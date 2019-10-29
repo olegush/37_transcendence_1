@@ -3,7 +3,7 @@ version: '3.6'
 services:
   web:
     build: ./transcendence
-    command: python transcendence/manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./transcendence/:/usr/src/app/
     ports:
