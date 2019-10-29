@@ -11,7 +11,8 @@ RUN apk add --virtual .build-deps \
     libffi-dev \
     libsodium-dev \
     build-base\
-    && pip install psycopg2 && pip install pynacl && pip install cryptography --no-binary cryptography
+    && pip install psycopg2 && pip install pynacl && pip install cryptography --no-binary cryptography \
+    && apk add jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev
 RUN pip install --upgrade pip
 COPY ./requirements.txt /usr/src/app/requirements.txt
 RUN pip install -r requirements.txt
