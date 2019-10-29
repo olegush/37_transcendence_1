@@ -1,9 +1,15 @@
 import os
 import sys
 
+from environs import Env
+
+env = Env()
+env.read_env()
+
+
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'transcendence.settings')
-    os.environ.setdefault('DJANGO_CONFIGURATION', 'Dev')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', f'{env("PROJECT_NAME")}.settings')
+    os.environ.setdefault('DJANGO_CONFIGURATION', f'{env("CONFIGURATION")}')
 
     try:
         from configurations.management import execute_from_command_line

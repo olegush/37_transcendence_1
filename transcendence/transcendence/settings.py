@@ -24,7 +24,7 @@ class Dev(Configuration):
     DEBUG =  env.bool('DEBUG')
 
 
-    ALLOWED_HOSTS = [f'{env("SITE")}']
+    ALLOWED_HOSTS = [f'{env("HOSTS")}']
 
 
     # Application definition
@@ -42,7 +42,7 @@ class Dev(Configuration):
         'django.contrib.staticfiles',
     ]
 
-    WSGI_APPLICATION = f'{env("DIR_PACKAGE")}.wsgi.application'
+    WSGI_APPLICATION = f'{env("PROJECT_NAME")}.wsgi.application'
 
     ASGI_APPLICATION = 'routing.application'
 
@@ -65,7 +65,7 @@ class Dev(Configuration):
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
     ]
 
-    ROOT_URLCONF = f'{env("DIR_PACKAGE")}.urls'
+    ROOT_URLCONF = f'{env("PROJECT_NAME")}.urls'
 
     TEMPLATES = [
         {
@@ -96,7 +96,7 @@ class Dev(Configuration):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': env('PG_DB'),
+            'NAME': env('PG_DB_NAME'),
             'USER': env('PG_USR'),
             'PASSWORD': env('PG_PWD'),
             'HOST': 'localhost',
@@ -170,9 +170,12 @@ class Dev(Configuration):
 
     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
     EMAIL_FILE_PATH = 'tmp/emails'
-    #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    #EMAIL_HOST = env('EMAIL_HOST')
-    #EMAIL_PORT = env('EMAIL_PORT')
-    #EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-    #EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-    #EMAIL_USE_TLS = True
+
+
+class Prod(Dev):
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = env('EMAIL_HOST')
+    EMAIL_PORT = env('EMAIL_PORT')
+    EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+    EMAIL_USE_TLS = True
