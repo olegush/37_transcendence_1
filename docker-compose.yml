@@ -20,6 +20,8 @@ services:
       - POSTGRES_DB=postgresql_database_name
       - POSTGRES_USER=postgresql_user
       - POSTGRES_PASSWORD=postgresql_password
+  redis:
+    image: redis
 
 volumes:
   postgres_data:
