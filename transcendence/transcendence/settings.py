@@ -50,7 +50,7 @@ class Dev(Configuration):
         'default': {
             'BACKEND': 'channels_redis.core.RedisChannelLayer',
             'CONFIG': {
-                "hosts": [env("HOSTS"), 6379],
+                "hosts": [(env("HOSTS"), 6379)],
             },
         },
     }
